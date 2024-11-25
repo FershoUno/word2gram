@@ -1,0 +1,35 @@
+#!/bin/bash
+# Author: FershoUno
+
+# Cargar variables
+source $SCRIPT_DIR/.env
+
+# Bucle que continuará mientras alguna de las dos condiciones no se cumpla
+while ! (curl -s --head $URL | head -n 1 | grep "200 OK" &> /dev/null)
+do
+        exit 1
+done
+
+# Directorio de trabajo
+SCRIPT_DIR="$(dirname "$0")"
+
+# Verificar y crear archivo antiguo si no existe
+if [ ! -f "$OLD" ]; then
+    touch "$OLD"
+fi
+
+# Obtener el contenido del feed RSS y procesarlo
+RSS_CONTENT=$(curl -s "$RSS_URL" | xmlstarlet sel -t -m "/rss/channel/item" -v "title" -o " - " -v "link" -n)
+echo "$RSS_CONTENT" > "$NEW"
+
+# Comparar MD5 de los archivos
+if [ "$(md5sum "$NEW" | cut -d " " -f 1)" != "$(md5sum "$OLD" | cut -d " " -f 1)" ]; then
+    # Guardar el contenido nuevo en el archivo antiguo
+    cat "$NEW" > "$OLD"
+
+    # Enviar mensaje a Telegram y capturar el ID del mensaje
+    RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+        -d "chat_id=${CHAT_ID}" \
+        -d "text=$RSS_CONTENT" \
+        -d "parse_mode=HTML")
+fi
