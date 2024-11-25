@@ -2,9 +2,18 @@
 
 Esta herramienta permite obtener nuevas entradas de un sitio web con WordPress y enviar la información usando un bot de Telegram a un grupo especifico
 
+## Dependencias
+
+* curl
+* xmlstarlet
+* Linux
+
+  
 ## Implementacion
 
-La implementacioń es bastante simple  
-
-Renombrar el fichero `.env.example` a `.env`  
-
+* Cree un bot de Telegram en `@BotFather`, personalice el bot, agreguelo en el grupo deseado y obtenga: el API KEY, ID del chat donde fue agregado
+* Renombre el archivo `.env.example` a `.env`
+* Rellene los datos solicitados del archivo .env
+* Utilice crontab para configurar el tiempo de ejecución de la herramienta, ejemplo de crontab:  
+>     */10 * * * * /PATH/word2gram/word2gram 
+* Listo!
