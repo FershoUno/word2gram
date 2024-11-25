@@ -16,4 +16,6 @@ Esta herramienta permite obtener nuevas entradas de un sitio web con WordPress y
 * Rellene los datos solicitados del archivo .env
 * Utilice crontab para configurar el tiempo de ejecución de la herramienta, ejemplo de crontab:  
 >     */10 * * * * /PATH/word2gram/word2gram 
+* Configure los ajustes del feed en la siguiente sección: **Ajustes del feed** y limitar a una sola entrada para que la herramienta pueda lecturar la entrada
 * Listo!
+
